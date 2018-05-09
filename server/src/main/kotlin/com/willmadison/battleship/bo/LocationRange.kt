@@ -31,11 +31,11 @@ data class LocationRange(val start: String, val end: String) {
         locations.add(start)
 
         if (start.inSameColumn(end)) {
-            for (row in start.row+1..end.row-1) {
+            for (row in start.row+1 until end.row) {
                 locations.add("$row${start.column}".toLocation())
             }
         } else if (start.inSameRow(end)) {
-            for (col in start.column+1..end.column-1) {
+            for (col in start.column+1 until end.column) {
                 locations.add("${start.row}$col".toLocation())
             }
         }
