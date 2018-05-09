@@ -1,6 +1,10 @@
 package com.willmadison.battleship.bo
 
-data class Board(val width: Int) {
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.*
+
+data class Board @JsonCreator constructor (@JsonProperty("width") val width: Int) {
 
     enum class ShotResult(val code: Char) {
         HIT('H'), MISS('M')
@@ -8,7 +12,9 @@ data class Board(val width: Int) {
 
     private val occupants: MutableMap<Location, Ship?> = mutableMapOf()
 
-    private val shotsByLocation: MutableMap<Location, ShotResult> = mutableMapOf()
+    var shotsByLocation: MutableMap<String, ShotResult> = mutableMapOf()
+
+    val id = UUID.randomUUID().toString()
 
     init {
         val ranges = mutableListOf<LocationRange>()
@@ -79,7 +85,7 @@ data class Board(val width: Int) {
                 } else {
                     val location = "$rowName$col".toLocation()
 
-                    val result = shotsByLocation[location]
+                    val result = shotsByLocation[location.toString()]
 
                     if (result != null) {
                         rowSb.append(result.code)
@@ -142,18 +148,20 @@ data class Board(val width: Int) {
                 if (occupant.isAfloat()) {
                     result = "Hit. ${occupant.type}."
                 } else {
-                    result = "Sunk ${occupant.type} of length ${occupant.length}!"
+                    result = "Sunk ${occupant.type}!"
                 }
             }
 
-            shotsByLocation[location] = ShotResult.HIT
+            shotsByLocation[location.toString()] = ShotResult.HIT
         } else {
             result = "Miss!"
-            shotsByLocation[location] = ShotResult.MISS
+            shotsByLocation[location.toString()] = ShotResult.MISS
         }
 
         return result
     }
 
     private fun isValidFor(location: Location) = occupants.containsKey(location)
+
+
 }

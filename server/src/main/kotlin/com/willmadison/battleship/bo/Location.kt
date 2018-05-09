@@ -5,6 +5,10 @@ data class Location(val row: Char, val column: Int) {
     fun isDiagonalTo(other: Location) = this.row != other.row && this.column != other.column
     fun inSameRow(other: Location) = this.row == other.row
     fun inSameColumn(other: Location) = this.column == other.column
+
+    override fun toString(): String {
+        return "$row$column".toUpperCase()
+    }
 }
 
 fun String.toLocation(): Location {
@@ -18,7 +22,7 @@ fun String.toLocation(): Location {
         throw InvalidLocationException("location code must begin with an alphabetic character")
     }
 
-    val column = this.slice(1..this.length - 1).toInt()
+    val column = this.slice(1 until this.length).toInt()
 
     return Location(row, column)
 }

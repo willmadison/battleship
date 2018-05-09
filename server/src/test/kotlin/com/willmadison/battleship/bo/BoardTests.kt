@@ -120,7 +120,7 @@ L
         assertEquals("Miss!", result)
 
         result = board.attack(Location('A', 3))
-        assertEquals("Sunk Cruiser of length 3!", result)
+        assertEquals("Sunk Cruiser!", result)
 
         assertEquals("""===========
 . 1 2 3 4

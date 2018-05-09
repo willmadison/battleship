@@ -1,6 +1,6 @@
 package com.willmadison.battleship.bo
 
-data class LocationRange(val start: String, val end: String) {
+data class LocationRange(private val start: String, private val end: String) {
     val length: Int
     val locations: List<Location>
 
@@ -45,5 +45,8 @@ data class LocationRange(val start: String, val end: String) {
         return locations
     }
 
-    fun isValidFor(board: Board, ship: Ship) = this.length < board.width && this.length == ship.length
+    fun isValidFor(board: Board, ship: Ship) = this.length < board.width &&
+            this.length == ship.length &&
+            this.locations.none { it.column > board.width } &&
+            this.locations.none {it.row > 'A'.plus(board.width)}
 }
